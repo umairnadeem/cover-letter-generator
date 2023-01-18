@@ -40,7 +40,7 @@ export function Dropzone() {
       <div>or drop Resume here ({acceptedFileTypes})</div>
       {
         fileRejections.length
-          ? <p style={{ color: "red" }}>Can only accept {acceptedFileTypes}</p>
+          ? <p style={{ color: "red" }}>Invalid type. Can only accept {acceptedFileTypes}</p>
           : <p>{fileName}</p>
       }
     </div>
