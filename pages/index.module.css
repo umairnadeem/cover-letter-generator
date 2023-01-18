@@ -57,8 +57,13 @@
   background-color: #16bb92;
 }
 
-.main .result {
-  font-weight: bold;
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: normal;
   white-space: pre-wrap;
-  width: 80vw;
+  margin: 10px 10%;
+  padding: 0px 10px;
+  font-size: 16px;
 }

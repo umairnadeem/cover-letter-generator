@@ -71,9 +71,9 @@ export default function Home() {
             />
             <input type="submit" value="Submit" />
           </form>
-          <div className={styles.result}>{result}</div>
         </div>
         </main>
+        <div className={styles.result}>{result}</div>
     </Context.Provider>
   );
 }
