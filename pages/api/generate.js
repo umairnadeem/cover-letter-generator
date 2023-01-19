@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 import ResumeParser from "resume-parser-extended";
-import {fromBufferWithMime} from "textract";
-import {sanitizeString} from "../../common/utils"
+import { fromBufferWithMime } from "textract";
+import { sanitizeString } from "../../common/utils";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -12,19 +12,28 @@ export default async function (req, res) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
-        message: "OpenAI API key not configured, please follow instructions in README.md",
-      }
+        message:
+          "OpenAI API key not configured, please follow instructions in README.md",
+      },
     });
     return;
   }
 
-  const prompt = String(req.body.prompt) || '';
-  const resume = String(req.body.resume) || '';
-  if (prompt.trim().length === 0 || resume.length < 1) {
+  const prompt = String(req.body.prompt || "");
+  const resume = String(req.body.resume || "");
+  if (prompt.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid prompt and resume",
-      }
+        message: "Please enter a valid role",
+      },
+    });
+    return;
+  }
+  if (resume.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: "Please enter a valid resume",
+      },
     });
     return;
   }
@@ -38,9 +47,9 @@ export default async function (req, res) {
       // presence_penalty: 1,
       // frequency_penalty: 1
     });
-    console.log("Got result", JSON.stringify(completion.data, null, 2))
+    console.log("Got result", JSON.stringify(completion.data, null, 2));
     res.status(200).json({ result: completion.data.choices[0].text });
-  } catch(error) {
+  } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
@@ -49,8 +58,8 @@ export default async function (req, res) {
       console.error(error);
       res.status(500).json({
         error: {
-          message: 'An error occurred during your request.',
-        }
+          message: "An error occurred during your request.",
+        },
       });
     }
   }
@@ -66,7 +75,9 @@ async function generatePrompt(prompt, resume) {
         reject(err);
         return;
       }
-      resolve(`Write a short cover letter for a ${sanitizedPrompt} role with the following resume: "${data}"`);
+      resolve(
+        `Write a short cover letter for a ${sanitizedPrompt} role with the following resume: "${data}"`
+      );
     });
   });
 }

@@ -8,6 +8,7 @@
   justify-content: center;
   align-items: center;
   opacity: 1;
+  z-index: 100;
 }
 
 .ldsRoller {
