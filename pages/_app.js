@@ -1,6 +1,9 @@
 import { Roboto } from "@next/font/google";
 import { Open_Sans } from "@next/font/google";
 import "./styles.css";
+import "reactjs-popup/dist/index.css";
+import Popup from "reactjs-popup";
+import { TIPS, CONTACT, POLICY } from "../common/consts";
 
 const roboto = Roboto({ subsets: ["latin"], weight: "400" }); // sans-serif
 const openSans = Open_Sans({ subsets: ["latin"] }); // serif
@@ -38,9 +41,28 @@ export default function App({ Component, pageProps }) {
         <h1>
           JobReady<font color="#FFD400">.</font>ai
         </h1>
-        <div>Cover Letter Generator</div>
+        <div>AI-powered Cover Letter Generator</div>
       </div>
       <Component {...pageProps} />
+      <footer>
+        <ul>
+          <li>
+            <Popup trigger={<button>Tips/Tricks</button>} modal>
+              <div className="popup">{TIPS}</div>
+            </Popup>
+          </li>
+          <li>
+            <Popup trigger={<button>Contact</button>} modal>
+              <div className="popup">{CONTACT}</div>
+            </Popup>
+          </li>
+          <li>
+            <Popup trigger={<button>Privacy</button>} modal>
+              <div className="popup">{POLICY}</div>
+            </Popup>
+          </li>
+        </ul>
+      </footer>
     </>
   );
 }
