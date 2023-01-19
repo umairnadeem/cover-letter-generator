@@ -1,3 +1,3 @@
 export function sanitizeString(str) {
-  return str.replace(/[^a-zA-Z]/gi, "");
+  return str.replace(/[^\sa-zA-Z]/gi, "");
 }
