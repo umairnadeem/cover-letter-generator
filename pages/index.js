@@ -45,24 +45,6 @@ export default function Home() {
       <Head>
         <title>JobReady</title>
       </Head>
-      <div className={styles.heading}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="50"
-          height="50"
-          viewBox="0 0 50 50"
-        >
-          <rect width="100%" height="100%" fill="#EDEDED" />
-          <g>
-            <rect x="40%" y="40%" width="300%" height="300%" fill="#FFFFFF" />
-            <rect x="70%" y="70%" width="260%" height="260%" fill="#FFD400" />
-          </g>
-        </svg>
-        <h1>
-          JobReady<font color="#FFD400">.</font>ai
-        </h1>
-        <div>Cover Letter Generator</div>
-      </div>
       <div className={styles.container}>
         {loading ? <Loader /> : null}
         <main
@@ -83,7 +65,7 @@ export default function Home() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
-              <input type="submit" value="Submit" />
+              <input type="submit" value="Generate" />
             </form>
           </div>
           <div className={styles.gridItem}>
