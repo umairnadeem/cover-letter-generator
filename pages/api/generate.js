@@ -19,12 +19,21 @@ export default async function (req, res) {
     return;
   }
 
-  const prompt = String(req.body.prompt || "");
+  const role = String(req.body.role || "");
+  const description = String(req.body.description || "");
   const resume = String(req.body.resume || "");
-  if (prompt.trim().length === 0) {
+  if (role.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid role",
+      },
+    });
+    return;
+  }
+  if (description.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: "Please enter a valid description",
       },
     });
     return;
@@ -41,7 +50,7 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: await generatePrompt(prompt, resume),
+      prompt: await generatePrompt(role, description, resume),
       temperature: 0.6,
       max_tokens: 500,
       // presence_penalty: 1,
@@ -65,8 +74,10 @@ export default async function (req, res) {
   }
 }
 
-async function generatePrompt(prompt, resume) {
-  const sanitizedPrompt = sanitizeString(prompt);
+async function generatePrompt(role, description, resume) {
+  const sanitizedRole = sanitizeString(role);
+  const sanitizedDescription = sanitizeString(description);
+
   return new Promise((resolve, reject) => {
     const [type, base64File] = resume.split(";base64,");
     const buffer = Buffer.from(base64File, "base64");
@@ -76,8 +87,10 @@ async function generatePrompt(prompt, resume) {
         return;
       }
       resolve(
-        `Write a short cover letter for a ${sanitizedPrompt} role with the following resume: "${data}"`
+        `Write a cover letter for a ${sanitizedRole} role with the following resume: "${data}".
+        Tailor it to the following job description: "${sanitizedDescription}"`
       );
+      // resolve(`Convert the resume into JSON: ${data}`);
     });
   });
 }

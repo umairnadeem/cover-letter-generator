@@ -7,7 +7,8 @@ import { Context } from "../common/Context";
 import { sanitizeString } from "../common/utils";
 
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
+  const [role, setRole] = useState("");
+  const [description, setDescription] = useState("");
   const [result, setResult] = useState();
   const [resume, setResume] = useState();
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,11 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: sanitizeString(prompt), resume }),
+        body: JSON.stringify({
+          role: sanitizeString(role),
+          description: sanitizeString(description),
+          resume,
+        }),
       });
 
       const data = await response.json();
@@ -60,10 +65,17 @@ export default function Home() {
             <form onSubmit={onSubmit}>
               <input
                 type="text"
-                name="prompt"
+                name="role"
                 placeholder="Role"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              <textarea
+                type="text"
+                name="description"
+                placeholder="Job Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
               <input type="submit" value="Generate" />
             </form>
