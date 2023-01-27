@@ -87,7 +87,7 @@ async function generatePrompt(role, description, resume) {
         return;
       }
       resolve(
-        `Write a cover letter for a ${sanitizedRole} role with the following resume: "${data}".
+        `Write a short cover letter for a ${sanitizedRole} role with the following resume: "${data}".
         Tailor it to the following job description: "${sanitizedDescription}"`
       );
       // resolve(`Convert the resume into JSON: ${data}`);
