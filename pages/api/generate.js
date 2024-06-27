@@ -1,12 +1,13 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import ResumeParser from "resume-parser-extended";
 import { fromBufferWithMime } from "textract";
 import { sanitizeString } from "../../common/utils";
 
-const configuration = new Configuration({
+const configuration = {
   apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+};
+
+const openai = new OpenAI(configuration);
 
 export default async function (req, res) {
   if (!configuration.apiKey) {
@@ -48,16 +49,21 @@ export default async function (req, res) {
   }
 
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: await generatePrompt(role, description, resume),
-      temperature: 0.6,
-      max_tokens: 500,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: await generatePrompt(role, description, resume),
+        },
+      ],
+      // temperature: 0.6,
+      // max_tokens: 500,
       // presence_penalty: 1,
       // frequency_penalty: 1
     });
-    console.log("Got result", JSON.stringify(completion.data, null, 2));
-    res.status(200).json({ result: completion.data.choices[0].text });
+    console.log("Got result", JSON.stringify(completion, null, 2));
+    res.status(200).json({ result: completion.choices[0].message.content });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -94,3 +100,10 @@ async function generatePrompt(role, description, resume) {
     });
   });
 }
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb",
+    },
+  },
+};
